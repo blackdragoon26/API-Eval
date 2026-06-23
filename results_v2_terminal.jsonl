@@ -1,0 +1,106 @@
+
+╭─    ~/Documents/projects/forty    main ───────────────────────────────── ✔  3s   forty   02:24:10 AM  ─╮
+╰─ export FORTYGUARD_API_KEY="ccdc012fe419802e5012974799cd7466"                                                       ─╯
+pip install requests
+python api_test_suite.py
+Requirement already satisfied: requests in ./forty/lib/python3.14/site-packages (2.34.2)
+Requirement already satisfied: charset_normalizer<4,>=2 in ./forty/lib/python3.14/site-packages (from requests) (3.4.7)
+Requirement already satisfied: idna<4,>=2.5 in ./forty/lib/python3.14/site-packages (from requests) (3.18)
+Requirement already satisfied: urllib3<3,>=1.26 in ./forty/lib/python3.14/site-packages (from requests) (2.7.0)
+Requirement already satisfied: certifi>=2023.5.7 in ./forty/lib/python3.14/site-packages (from requests) (2026.6.17)
+
+[notice] A new release of pip is available: 26.1.1 -> 26.1.2
+[notice] To update, run: pip install --upgrade pip
+=== Section 0: OpenAPI / docs discovery ===
+[openapi_discovery_openapi.json] GET https://api.fortyguard.com/openapi.json -> 200 (1.47s)
+[openapi_discovery_docs] GET https://api.fortyguard.com/docs -> 404 (0.78s)
+[openapi_discovery_redoc] GET https://api.fortyguard.com/redoc -> 200 (0.82s)
+
+=== Section 1: Functional happy-path tests ===
+[heatmap_happy_path] POST https://api.fortyguard.com/v1/heatmap -> 500 (1.00s)
+[heatmap_repeat_check_0] POST https://api.fortyguard.com/v1/heatmap -> 500 (1.03s)
+[heatmap_repeat_check_1] POST https://api.fortyguard.com/v1/heatmap -> 500 (1.16s)
+[satellite_happy_path] POST https://api.fortyguard.com/v1/satellite -> 200 (1.23s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.06s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.18s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.43s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.28s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.12s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.08s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.14s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.16s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.09s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.29s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.19s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.01s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.14s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.27s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.03s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.10s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.11s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.09s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.15s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.06s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.36s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.32s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.14s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.11s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.36s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.10s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.11s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.06s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.32s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.09s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.10s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.20s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.31s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.12s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.03s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.28s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.07s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.06s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.12s)
+[satellite_happy_path_poll] GET https://api.fortyguard.com/v1/status/e5c8dff5-2d5c-4ae0-b1f1-66c3cb04ae46 -> 200 (1.20s)
+[satellite_happy_path] Timed out waiting for completion
+[env_params_3_fixed_schema] POST https://api.fortyguard.com/v1/env_params -> 422 (0.96s)
+[env_params_4_fixed_schema] POST https://api.fortyguard.com/v1/env_params -> 422 (1.21s)
+[heat_intelligence_fixed_schema] POST https://api.fortyguard.com/v1/heat_intelligence -> 200 (1.19s)
+
+=== Section 2: Validation / error-handling matrix ===
+[missing_api_key] POST https://api.fortyguard.com/v1/heatmap -> 401 (0.83s)
+[invalid_latitude_200] POST https://api.fortyguard.com/v1/satellite -> 422 (1.99s)
+[invalid_longitude_-200] POST https://api.fortyguard.com/v1/satellite -> 422 (1.07s)
+[polygon_not_closed] POST https://api.fortyguard.com/v1/heatmap -> 500 (1.07s)
+[invalid_granularity_75] POST https://api.fortyguard.com/v1/heatmap -> 422 (0.99s)
+[invalid_filter_type_4] POST https://api.fortyguard.com/v1/heatmap -> 422 (0.98s)
+[malformed_date_format] POST https://api.fortyguard.com/v1/heatmap -> 422 (0.99s)
+[filter_type2_over_23h] POST https://api.fortyguard.com/v1/heatmap -> 422 (1.03s)
+[non_us_coordinates_recheck] POST https://api.fortyguard.com/v1/satellite -> 200 (1.13s)
+[garbage_activity_id_recheck] GET https://api.fortyguard.com/v1/status/not-a-real-id -> 403 (0.96s)
+[empty_analysis_array_fixed] POST https://api.fortyguard.com/v1/heat_intelligence -> 422 (1.12s)
+[invalid_analysis_category_fixed] POST https://api.fortyguard.com/v1/heat_intelligence -> 422 (0.96s)
+[injection_string_field] POST https://api.fortyguard.com/v1/satellite -> 200 (1.20s)
+
+=== Section 3: Performance checks ===
+[latency_run_0] POST https://api.fortyguard.com/v1/satellite -> 200 (1.21s)
+[latency_run_1] POST https://api.fortyguard.com/v1/satellite -> 200 (1.41s)
+[latency_run_2] POST https://api.fortyguard.com/v1/satellite -> 200 (1.48s)
+
+Latency over 3 runs (satellite) — min: 1.21s, median: 1.41s, max: 1.48s
+[concurrent_1] POST https://api.fortyguard.com/v1/satellite -> 200 (1.50s)
+[concurrent_0] POST https://api.fortyguard.com/v1/satellite -> 200 (1.52s)
+[concurrent_2] POST https://api.fortyguard.com/v1/satellite -> 200 (1.64s)
+
+Concurrent submission status codes (satellite): [200, 200, 200]
+
+======================================================================
+SUMMARY
+======================================================================
+Heatmap calls: 3 total, 3 returned 500 (STILL BROKEN)
+Rate-limit/credit headers found: NONE across any request
+  https://api.fortyguard.com/openapi.json -> 200
+  https://api.fortyguard.com/docs -> 404
+  https://api.fortyguard.com/redoc -> 200
+
+Full details in: results_v2.jsonl
+======================================================================

@@ -1,6 +1,6 @@
 
 ╭─    ~/Documents/projects/forty    main ───────────────────────────────── ✔  3s   forty   02:24:10 AM  ─╮
-╰─ export FORTYGUARD_API_KEY="ccdc012fe419802e5012974799cd7466"                                                       ─╯
+╰─ export FORTYGUARD_API_KEY="<redacted>"                                                       ─╯
 pip install requests
 python api_test_suite.py
 Requirement already satisfied: requests in ./forty/lib/python3.14/site-packages (2.34.2)

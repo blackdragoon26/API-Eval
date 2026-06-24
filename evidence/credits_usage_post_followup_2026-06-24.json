@@ -1,0 +1,67 @@
+{
+  "status_code": 200,
+  "response": {
+    "api_key": "<redacted api key>",
+    "subscription_id": "sub_lozod5yjln",
+    "plan_details": {
+      "plan_type": "Premium",
+      "cycle_type": "One-Time",
+      "subscription_start_date": "Jun 22, 2026",
+      "billing_period": "Jun 22, 2026 \u2013 Jul 22, 2026",
+      "active": true,
+      "credits_reset_date": "Jun 29, 2026"
+    },
+    "credit_summary": {
+      "total_available_credits": 1000000,
+      "cycle_credits_used": 103440,
+      "cycle_remaining_credits": 896560,
+      "cycle_usage_percentage": 10.3,
+      "total_credits_used": 103440,
+      "total_remaining_credits": 896560
+    },
+    "activity_breakdown": [
+      {
+        "name": "Tile Satellite Segmentation",
+        "credits": 72000,
+        "count": 5,
+        "percentage": 7.2
+      },
+      {
+        "name": "Streetview Segmentation",
+        "credits": 8600,
+        "count": 1,
+        "percentage": 0.86
+      },
+      {
+        "name": "Heat Intelligence Report",
+        "credits": 8600,
+        "count": 1,
+        "percentage": 0.86
+      },
+      {
+        "name": "Heatmap Generation",
+        "credits": 8440,
+        "count": 2,
+        "percentage": 0.84
+      },
+      {
+        "name": "Environment Parameter Analysis",
+        "credits": 5800,
+        "count": 2,
+        "percentage": 0.58
+      },
+      {
+        "name": "Unused Credits",
+        "credits": 896560,
+        "count": 0,
+        "percentage": 89.66
+      }
+    ],
+    "total_credits_used": 103440,
+    "billing_cycle": {
+      "start_date": "2026-06-22T18:16:28.140925+00:00",
+      "end_date": "2026-07-22T18:16:28.140929+00:00",
+      "credits_reset_date": "2026-06-29T18:16:28.140469+00:00"
+    }
+  }
+}

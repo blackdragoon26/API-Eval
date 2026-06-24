@@ -1,209 +1,185 @@
-# FortyGuard Products Evaluation Report
+# FortyGuard API Evaluation Report
 
 **Candidate:** Sankalp Jha  
 **Position:** DevSecOps and Network Architect  
 **Evaluation date:** June 24, 2026  
 **Repository:** github.com/blackdragoon26/API-Eval  
-**Scope:** FortyGuard Temperature Dashboard(R), Temperature API(R), API documentation, and bounded live API probes
+**Primary focus:** Temperature API(R), endpoint behavior, async task lifecycle, validation, credit accounting, and documentation accuracy
 
 ## Executive Summary
 
-FortyGuard has a compelling core product direction: hyperlocal temperature intelligence, asynchronous geospatial processing, a modern dashboard surface, and a developer-friendly credit model where failed tasks are not charged. The API shape is also broadly sensible for heavy spatial workloads: submit a job, receive an `activity_id`, then poll a status endpoint for completion.
+The FortyGuard Temperature API has a solid foundation. When requests are shaped exactly like the public documentation, the main async endpoints submit successfully and complete: Heatmap, Satellite View Segmentation, Street View Segmentation, and Environmental Parameters all returned completed results in my final endpoint audit.
 
-The main gaps are not conceptual. They are reliability, validation, and operational developer experience. In live testing on June 24, 2026, a valid `POST /v1/heatmap` request still returned `500 Internal Server Error`, and the same endpoint also returned `500` for an invalid unclosed polygon that should be rejected at the validation layer. The API exposes a useful OpenAPI 3.1 schema at `/openapi.json`, but that schema is not surfaced as an interactive first-class documentation experience in the main docs portal. The docs also contain several mismatches with live behavior, especially around credits usage, environmental parameter customization, response status codes, and documented limits.
+The most important issue is not that the core API is unusable. It is that validation and operational transparency are not yet production-grade. A documented Heatmap `FeatureCollection` request completed successfully, but an intentionally unclosed polygon was also accepted, completed, and appeared in credit usage as a Heatmap Generation task. That is a high-trust issue: invalid geometry should be rejected before job creation and should not consume credits.
 
-The dashboard login experience is polished and responsive, but `/map` redirected to `/login` in a fresh browser session, so a new unauthenticated evaluator cannot inspect the map workflow without dashboard credentials or an existing session. The login page itself presents a clean map-backed first impression, but deeper map usability claims should be treated as previously observed feedback rather than freshly verified in this run.
+The second class of issues is developer experience. The API exposes a useful OpenAPI 3.1 schema, but the public docs do not fully align with live behavior. Credits usage is documented as a form/GET-style page while the real API is a POST body endpoint. Environmental Parameters are described as customizable, but the OpenAPI request schema does not expose a parameter selector. Responses also do not include rate-limit, retry, request-id, or remaining-credit headers, which matters for a credit-based async platform.
 
 ## Methodology
 
-I used three evidence sources:
+I ran a bounded API audit on June 24, 2026 using the evaluation key. The key was passed only through an environment variable and is redacted from all stored evidence. The audit intentionally avoided load testing, credential abuse, or destructive behavior.
 
-1. A bounded Python API probe using the provided evaluation API key, with the key redacted from stored output.
-2. Rendered documentation review using Playwright screenshots and text extraction.
-3. Visual inspection of dashboard routes at desktop and mobile viewport sizes.
+Evidence files:
 
-I intentionally avoided destructive or high-volume testing. I did not run a rate-limit flood, credential attacks, or any test intended to degrade the service. The probe focused on normal request paths, validation behavior, status polling, docs accuracy, and operational headers.
+- `final_api_endpoint_audit.py`
+- `evidence/final_api_endpoint_audit_2026-06-24.jsonl`
+- `evidence/final_api_endpoint_summary_2026-06-24.md`
+- `evidence/final_status_followup_2026-06-24.jsonl`
+- `evidence/credits_usage_post_followup_2026-06-24.json`
 
-Evidence artifacts:
+## Endpoint Coverage Summary
 
-- `evidence/api_probe_2026-06-24.jsonl`
-- `evidence/visual_audit_2026-06-24.json`
-- `evidence/docs_pages_2026-06-24.json`
-- `evidence/limitations_full_text_2026-06-24.txt`
-- `evidence/screenshots/`
+| Area | Result | Notes |
+|---|---:|---|
+| `GET /health` | 200 | Public health check works. |
+| `GET /ready` | 200 | Public readiness check works. |
+| `GET /openapi.json` | 200 | OpenAPI 3.1 schema is available. |
+| `GET /docs` | 404 | Swagger UI is disabled. |
+| `GET /redoc` | 200 | ReDoc shell exists, but it should be linked from the main docs if intended for developers. |
+| `POST /v1/heatmap` valid `FeatureCollection` | 200 -> Completed | Returned `map_data` FeatureCollection with 180 features plus `stats_data`. |
+| `POST /v1/heatmap` unclosed polygon | 200 -> Completed | Bug: invalid geometry was accepted and completed. |
+| `POST /v1/satellite` valid request | 200 -> Completed | Returned coordinates, image metadata, `orignal_image`, and segmentation. |
+| `POST /v1/streetview` valid request | 200 -> Completed | Returned front street-view segmentation result. |
+| `POST /v1/env_params` OpenAPI shape | 200 -> Completed | Returned metadata, one location, environmental parameters, and solar irradiance. |
+| `POST /v1/heat_intelligence` invalid category | 422 | Enum validation works. |
+| `GET /v1/status/not-a-real-id` | 403 | Should be 404 or a clearer resource-not-found response. |
+| `POST /v1/system/fetch-api-key-usage` | 200 | Works, but docs label credits usage as GET/form-style. |
 
-## What Works Well
+## Main Strengths
 
-1. **Strong async API pattern:** Returning an `activity_id` for heavy geospatial tasks is the right shape. It prevents clients from holding long HTTP connections while expensive spatial or imagery work runs.
+1. **Async architecture is appropriate.** Returning an `activity_id` and polling `/v1/status/{activity_id}` is the right pattern for heatmaps, segmentation, and report generation.
 
-2. **Clear core domain value:** The docs communicate a strong product thesis around Large Temperature Models, city-scale heat intelligence, satellite/street imagery segmentation, and environmental parameters.
+2. **Core endpoint set is meaningful.** Heatmap, Satellite, Street View, Environmental Parameters, and Heat Intelligence cover a coherent product surface for urban temperature intelligence.
 
-3. **Credit-on-success model:** The docs state that failed tasks are not charged. This is the right billing posture for an async API, especially while workloads are compute-heavy and can fail for reasons outside the client's control.
+3. **Main happy paths work when request shape matches docs.** The final audit confirmed completed outputs for Heatmap, Satellite, Street View, and Environmental Parameters.
 
-4. **OpenAPI availability:** `https://api.fortyguard.com/openapi.json` returns an OpenAPI 3.1.0 schema. This is valuable for SDK generation, Postman import, validation, and automated API testing.
+4. **OpenAPI schema exists.** `/openapi.json` is a strong foundation for Postman import, SDK generation, schema testing, and automated contract checks.
 
-5. **Dashboard login presentation:** The Temperature Dashboard login screen is visually polished, works at both desktop and mobile widths, and makes the product category immediately clear through the map-backed design.
+5. **Credit usage API is useful.** The usage endpoint returns plan details, credit totals, and activity breakdowns. This is valuable; it just needs to be documented as a normal API endpoint.
 
-## Key Findings
+## Critical Findings
 
-### 1. Heatmap endpoint reliability is currently blocking the primary workflow
+### 1. Invalid heatmap geometry is accepted, completed, and charged
 
-**Evidence:** In the live probe, a valid heatmap submission returned:
+The docs state that polygons must be closed and that invalid inputs are rejected. In the final audit, this invalid `FeatureCollection` was submitted:
 
 ```text
-POST https://api.fortyguard.com/v1/heatmap -> 500
-{"error": true, "message": "Internal server error occurred"}
+Polygon coordinates: first coordinate != last coordinate
+Endpoint: POST /v1/heatmap
+Actual: 200 Heatmap Submitted Successfully
+Follow-up status: Completed
+Result summary: map_data FeatureCollection, 157 features, stats_data present
 ```
 
-This is the most important issue because heatmap generation appears to be one of the flagship API workflows. If the happy path is failing, it undermines developer trust even if adjacent endpoints work.
+Credit usage after completion showed `Heatmap Generation` with `count: 2` and `credits: 8440`. In this final run, the only heatmap tasks were the valid polygon and the unclosed polygon, so the invalid geometry appears to have consumed heatmap credits.
 
-**Recommendation:** Treat this as a P0. Add regression tests for a minimal valid polygon, known-good time range, all supported granularities, and both Basic/Premium area limits.
+**Why this matters:** This is a trust and billing issue. A developer can submit malformed geospatial input, receive a successful activity, get a completed result, and lose credits instead of receiving a clear client-side validation error.
 
-### 2. Geometry validation errors escape as 500s
+**Recommendation:** Add strict GeoJSON validation before job creation:
 
-**Evidence:** An unclosed polygon also returned `500 Internal Server Error`.
+- Require `FeatureCollection` or document/support both `FeatureCollection` and raw `Polygon`.
+- Validate ring closure, minimum points, self-intersection, area limits, and supported region before enqueueing.
+- Return `400` or `422` with `code: invalid_polygon`.
+- Never charge credits for validation failures.
 
-Expected behavior is a client-side validation error such as `400 Bad Request` or `422 Unprocessable Entity`, with a specific message like `polygon must be closed`.
+### 2. GeoJSON request shape is ambiguous
 
-**Recommendation:** Validate GeoJSON shape before enqueueing the job. Return a structured error envelope with a stable machine-readable code, for example:
+The public docs use `FeatureCollection`, while some language says "GeoJSON polygon". A common developer interpretation is to pass a raw GeoJSON `Polygon`. Earlier bounded probing showed that a raw `Polygon` payload returned a `500 Internal Server Error`, while the documented `FeatureCollection` shape worked.
+
+**Recommendation:** Make the accepted shape explicit in both docs and OpenAPI. If only `FeatureCollection` is supported, enforce that with schema validation and return `422` for raw `Polygon`. If both are intended, normalize both safely.
+
+### 3. Unknown activity IDs return 403 instead of a not-found response
+
+`GET /v1/status/not-a-real-id` returned:
 
 ```json
-{
-  "error": {
-    "code": "invalid_polygon",
-    "message": "Polygon ring must be closed: first and last coordinates must match.",
-    "doc_url": "https://docs-api.fortyguard.com/docs/create-heatmap"
-  }
-}
+{"error": true, "status_code": 403, "details": {"message": "Unauthorized access"}}
 ```
 
-### 3. Error codes are inconsistent with docs and REST expectations
-
-Examples:
-
-| Test case | Expected | Actual | Notes |
-|---|---:|---:|---|
-| Missing `api-key` header | 401 or 403 | 401 | Good, clear message. |
-| Invalid latitude `200` | 400 per docs, or 422 | 422 | Technically acceptable, but docs say 400. |
-| Invalid granularity `75` | 400 per docs, or 422 | 422 | Useful validation detail, but docs mismatch. |
-| Malformed date `07-15-2024` | 400 per docs, or 422 | 422 | Useful validation detail, but docs mismatch. |
-| Unclosed polygon | 400/422 | 500 | Server-side bug. |
-| Unknown `activity_id` | 404 | 403 | Looks like auth failure instead of missing resource. |
-
-**Recommendation:** Standardize the error model and document it. The current mix of custom `error/details` objects and FastAPI `detail` validation arrays is workable internally but uneven for external developers.
+For a request authenticated with a valid API key, this reads as an authorization problem, not a missing task. A `404 Not Found` or `403` with a more precise message such as `activity does not belong to this API key` would be clearer.
 
 ### 4. Operational headers are missing
 
-Across the live probe, responses did not include:
+Across the final audit, I did not observe standard operational headers such as:
 
 - `X-RateLimit-Limit`
 - `X-RateLimit-Remaining`
 - `Retry-After`
 - `X-Credits-Remaining`
-- `X-Request-Id` or equivalent correlation header
+- `X-Request-Id` or `X-Correlation-Id`
 
-This matters because FortyGuard uses credit-based billing and async processing. Developers should not need a separate usage call after every operation just to understand remaining quota.
+**Why this matters:** Developers integrating a credit-based async API need to know quota state, retry behavior, and support correlation without making a separate credits call after every request.
 
-**Recommendation:** Add lightweight operational headers to all authenticated responses. At minimum, return remaining cycle credits, request ID, and rate-limit state. Return `Retry-After` with any `429 Too Many Requests` response.
+### 5. Credits usage docs do not match the real API
 
-### 5. Credits usage docs do not match the actual API shape
-
-The docs sidebar labels "Check API Credits Usage" as `GET`, and the page presents a form. The OpenAPI schema and live probe show the underlying endpoint is:
+The docs sidebar labels "Check API Credits Usage" as `GET`, and the page presents a form. The live OpenAPI and audit show the actual API shape:
 
 ```text
 POST /v1/system/fetch-api-key-usage
 Body: {"api_key": "..."}
 ```
 
-The endpoint works and returns useful plan/credit/activity data, but this should be documented as a normal HTTP endpoint with request/response schema, not only as a UI form.
+The endpoint works well, but it should be documented with raw HTTP examples and response schema.
 
-**Recommendation:** Add a raw cURL/Python/JavaScript example for credit usage, and reconcile the sidebar method label with the actual POST endpoint.
+### 6. Environmental Parameters documentation/schema mismatch
 
-### 6. Environmental parameter customization is unclear
+The docs say Basic supports "up to 3 customizable environmental parameters per request" and Premium supports all parameters. The OpenAPI request schema does not include a `parameters` selector. A doc-style request containing `location` plus a `parameters` array returned `422`, while the OpenAPI shape completed.
 
-The docs state that Basic allows "up to 3 customizable environmental parameters per request" and Premium gives full access. However, the live OpenAPI schema for `EnvParamsRequest` requires only:
+The completed result also contains field names that should be documented more carefully, for example:
 
-```text
-latitude, longitude, temperature, date_time
-```
+- `air_quality:idx`
+- `air_quality_pm2p5:idx`
+- `cloud_cover_octas`
+- `co2_ppm: [-999]`
 
-It does not expose a `parameters` selector. A doc-style request with a `parameters` array was rejected with `422` because the expected top-level fields were missing.
+**Recommendation:** Either expose parameter selection in OpenAPI or remove/clarify "customizable" wording. Also document field naming, units, and sentinel values like `-999`.
 
-**Recommendation:** If parameter selection is supported, expose it in the OpenAPI schema. If the endpoint always returns a fixed set, update the docs to remove "customizable" wording or explain plan-level filtering clearly.
+### 7. Satellite response contains a spelling/API contract issue
 
-### 7. The API exposes useful OpenAPI/ReDoc assets but not as an integrated DX path
+The Satellite result uses `orignal_image` rather than `original_image`. Street View uses `original_image`, so the APIs are inconsistent.
 
-`/openapi.json` is public and useful. `/redoc` exists, while `/docs` returns `404`. The main docs site is visually clean and includes code examples, but it does not provide an in-page "Try it" workflow with the user's API key.
+**Recommendation:** Add `original_image`, keep `orignal_image` temporarily for backward compatibility, and mark the typo deprecated.
 
-**Recommendation:** Link the OpenAPI spec from the docs navigation, provide a Postman import button, and consider an authenticated "Try it" panel for safe endpoints. This would reduce time-to-first-successful-call.
+## Credit Accounting Observation
 
-### 8. Dashboard map route is auth-gated in a fresh browser session
+Before the final audit, the key showed `69,100` used credits. After submitted tasks completed, usage showed `103,440` used credits. The delta was `34,340` credits:
 
-Directly visiting `https://dashboard.fortyguard.com/map` redirected to `https://dashboard.fortyguard.com/login` on both desktop and mobile. The login page is responsive and polished, but a fresh evaluator cannot inspect the map workflow without dashboard credentials.
+| Activity | Added count | Added credits |
+|---|---:|---:|
+| Tile Satellite Segmentation | 1 | 14,400 |
+| Streetview Segmentation | 1 | 8,600 |
+| Heatmap Generation | 2 | 8,440 |
+| Environment Parameter Analysis | 1 | 2,900 |
 
-**Recommendation:** For hiring/evaluation flows, include either dashboard credentials in the access email or a dedicated demo mode. If `/map` is intentionally protected, the redirect is correct, but the candidate journey should make the required login path unambiguous.
+The two heatmap tasks were the valid `FeatureCollection` and the unclosed polygon. This supports the finding that invalid geometry was processed and charged.
 
-## Dashboard UX Notes
+## Documentation Improvements
 
-Fresh-session visual checks:
+1. Add full raw HTTP docs for `POST /v1/system/fetch-api-key-usage` and custom usage.
+2. Link `/openapi.json` from the main documentation and add a Postman import button.
+3. Document canonical status values and recommended polling intervals/backoff.
+4. Align documented status codes with actual `422` validation behavior, or change implementation to match docs.
+5. Document rate limits and include `429`/`Retry-After` examples.
+6. Clarify accepted GeoJSON shape for heatmaps.
+7. Document units and sentinel values for all environmental fields.
+8. Fix `orignal_image` naming.
+9. Explain evaluation/free-key credit plans separately from normal Basic/Premium plan limits.
 
-- Desktop login screenshot: `evidence/screenshots/dashboard_map_desktop.png`
-- Mobile login screenshot: `evidence/screenshots/dashboard_map_mobile.png`
+## Missing API Capabilities
 
-Observed strengths:
-
-- Strong first-viewport brand presence.
-- Map-backed background communicates the product domain quickly.
-- Mobile layout remains readable and centered.
-- Standard login options are present: email/password, forgot password, Google sign-in, sign-up.
-
-Limitations of this run:
-
-- I could not verify authenticated map controls, heatmap creation, data export, dashboard performance, or time-slider behavior because dashboard credentials were not available in the workspace.
-- The final dashboard feedback should therefore distinguish between the visually verified login experience and previously observed in-dashboard behavior.
-
-## Documentation Audit
-
-High-value documentation improvements:
-
-1. **Expose the raw HTTP schema for credits usage.** The current docs show a form but not the actual `POST /v1/system/fetch-api-key-usage` shape.
-
-2. **Clarify plan credits for evaluation/free keys.** The docs list Premium as 5,000,000 monthly credits, while the live evaluation key returned Premium access with 1,000,000 available credits. That may be correct for a one-time/evaluation key, but the distinction should be explicit.
-
-3. **Document rate limits with real values.** Release notes mention rate limits, but the Known Limitations page did not contain `429`, `Retry-After`, or concrete request limits in the captured full text.
-
-4. **Standardize status values.** Docs and live responses use capitalized `Processing` and `Completed`, while client examples lower-case values before comparison. That is fine as defensive client code, but the canonical API enum should be stated once.
-
-5. **Fix spelling in the satellite schema.** The satellite docs and result use `orignal_image`; this should be `original_image`. If backwards compatibility matters, keep both temporarily and deprecate the misspelled key.
-
-6. **Add polling guidance.** Recommend initial delay, polling interval, exponential backoff, max wait, timeout behavior, and whether polling itself is rate-limited or charged.
-
-7. **Add units everywhere.** Heat Intelligence and Environmental Parameters do mention some Celsius units, but all returned environmental and solar fields should consistently document units and sentinel values.
-
-## API Design Recommendations
-
-1. **Add webhook callbacks for async jobs.** Polling is acceptable for quickstarts, but production integrations need a `webhook_url` callback with signed events for completed/failed tasks.
-
-2. **Add task cancellation.** A `DELETE /v1/status/{activity_id}` or `POST /v1/tasks/{activity_id}/cancel` endpoint would let developers stop stuck or accidental jobs.
-
-3. **Add idempotency keys.** Async POST endpoints should support an `Idempotency-Key` header so retries do not create duplicate billable tasks.
-
-4. **Add batch submission.** Batch heatmaps or multi-point environmental requests would reduce client overhead for enterprise workloads.
-
-5. **Add standard error envelopes.** Use stable `code`, human `message`, `request_id`, and optional `doc_url`.
-
-6. **Return operational headers.** Credits, rate limits, request ID, cache hints where applicable, and `Retry-After`.
-
-7. **Document caching behavior.** For historical or slow-changing temperature data, `Cache-Control` and `ETag` guidance would help clients reduce cost and API load.
+- **Webhooks/callbacks:** Long-running tasks currently require polling.
+- **Task cancellation:** There is no way to cancel accidental or stuck jobs.
+- **Idempotency keys:** Safe retry behavior is important for async POST endpoints.
+- **Batch endpoints:** Multi-polygon or multi-location workloads require repeated individual submissions.
+- **Request correlation:** A response-level request ID would improve support/debuggability.
 
 ## Suggested Ratings
 
 | Area | Suggested rating | Rationale |
 |---|---:|---|
-| Dashboard usability | 6/10 | Polished login and clear product branding, but authenticated map workflow could not be freshly verified and prior first-run observations suggest onboarding gaps. |
-| API | 5/10 | Strong async architecture and useful OpenAPI schema, but the primary heatmap happy path returning 500 is a serious reliability issue. |
-| Overall experience | 6/10 | Strong product potential and good foundations, but reliability, docs accuracy, and operational transparency need tightening before production-grade developer trust. |
+| API | 7/10 | Main endpoint happy paths work and complete, but validation, billing safeguards, docs accuracy, and operational headers need work. |
+| Dashboard usability | 6/10 | Login/entry experience is polished, but authenticated map workflow needs a separate credentialed review. |
+| Overall experience | 7/10 | Strong product foundation with clear climate-tech value; the highest-priority fixes are around API trust and developer operations. |
 
 ## Final Takeaway
 
-FortyGuard feels like a technically ambitious platform with a real product thesis. The improvements that would most increase trust are not cosmetic: fix the heatmap happy path, validate geospatial inputs before job submission, standardize the error model, expose rate/credit telemetry in headers, and turn the hidden OpenAPI schema into a first-class developer experience. Once those are addressed, the product will feel much more enterprise-ready.
+FortyGuard's API is much closer to usable than the first rough probe suggested. The main endpoints work when called with the documented request shapes. The strongest feedback is therefore sharper: tighten validation before billing, make the OpenAPI contract precise, expose operational headers, document credits/rate limits clearly, and add async production features like webhooks, cancellation, and idempotency.

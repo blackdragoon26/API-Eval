@@ -1,9 +1,12 @@
-# FortyGuard Technical Evaluation - Comparative Notes
+<img width="512" height="110" alt="image" src="https://github.com/user-attachments/assets/822db016-1b32-40e9-a765-9176a6e70b5d" />
 
-**Author:** Sankalp Jha  
-**Role Applied:** DevSecOps and Network Architect  
+# FortyGuard Comparative Analysis - Engineering Notes
+
+**Candidate:** [Sankalp Jha](https://github.com/blackdragoon26)  
+**Position:** Software Engineer Intern 
 **Date:** June 24, 2026  
-**Repository:** github.com/blackdragoon26/API-Eval
+**Repository:** [github.com/blackdragoon26/API-Eval ](https://github.com/blackdragoon26/API-Eval) <br>
+**Scope:** Temperature API, async job behavior, validation, credit accounting, docs accuracy, and a light dashboard/docs visual pass
 
 ## Summary
 

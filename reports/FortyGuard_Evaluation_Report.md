@@ -1,3 +1,5 @@
+<img width="512" height="110" alt="image" src="https://github.com/user-attachments/assets/822db016-1b32-40e9-a765-9176a6e70b5d" />
+
 # FortyGuard API Evaluation - Engineering Notes
 
 **Candidate:** [Sankalp Jha](https://github.com/blackdragoon26)  

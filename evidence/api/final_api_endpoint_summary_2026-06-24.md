@@ -68,5 +68,5 @@ The two heatmap tasks in this run were the valid FeatureCollection and the unclo
 
 ## Evidence
 
-- Raw sanitized JSONL: `evidence/final_api_endpoint_audit_2026-06-24.jsonl`
-- Summary: `evidence/final_api_endpoint_summary_2026-06-24.md`
+- Raw sanitized JSONL: `evidence/api/final_api_endpoint_audit_2026-06-24.jsonl`
+- Summary: `evidence/api/final_api_endpoint_summary_2026-06-24.md`

@@ -11,7 +11,7 @@ Goal: produce evaluation feedback sharp enough to stand out — not generic "loo
 - [ ] `export FORTYGUARD_API_KEY="..."` in your shell — never hardcode it in a script you might paste somewhere
 - [ ] Run `Check API Credits Usage` once to record starting plan + credit balance (you'll diff this after testing to confirm credit-deduction behavior is correct)
 - [ ] Skim Known Limitations + Release Notes pages once more — note the exact limits (10mi² Basic / 50mi² Premium, 3 env params Basic, US-only, granularity 60/80/100, filter_type 2 max 23hrs)
-- [ ] Set up `api_test_suite.py` (provided separately) — run `pip install requests`
+- [ ] Set up `scripts/api_test_suite.py` — run `pip install requests`
 
 ---
 

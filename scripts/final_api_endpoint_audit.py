@@ -5,11 +5,11 @@ This is a bounded, hiring-evaluation-style probe, not a load test.
 
 Usage:
     export FORTYGUARD_API_KEY="..."
-    python final_api_endpoint_audit.py
+    python scripts/final_api_endpoint_audit.py
 
 Outputs:
-    evidence/final_api_endpoint_audit_2026-06-24.jsonl
-    evidence/final_api_endpoint_summary_2026-06-24.md
+    evidence/api/final_api_endpoint_audit_2026-06-24.jsonl
+    evidence/api/final_api_endpoint_summary_2026-06-24.md
 
 The API key is never written to output files. Large Base64/image/PDF payloads are
 redacted so the evidence remains shareable.
@@ -31,7 +31,7 @@ import requests
 BASE = "https://api.fortyguard.com"
 API = f"{BASE}/v1"
 RUN_DATE = "2026-06-24"
-OUT_DIR = Path("evidence")
+OUT_DIR = Path("evidence/api")
 JSONL = OUT_DIR / f"final_api_endpoint_audit_{RUN_DATE}.jsonl"
 SUMMARY = OUT_DIR / f"final_api_endpoint_summary_{RUN_DATE}.md"
 
@@ -321,7 +321,7 @@ def write_summary(records: list[dict[str, Any]]) -> None:
 
 
 def main() -> None:
-    OUT_DIR.mkdir(exist_ok=True)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
     JSONL.write_text("", encoding="utf-8")
 
     records: list[dict[str, Any]] = []

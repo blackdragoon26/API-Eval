@@ -6,7 +6,7 @@
     "status": 200,
     "title": "FortyGuard API",
     "elapsedMs": 13669,
-    "screenshot": "/Users/sankalpjha/Documents/projects/forty/evidence/screenshots/docs_quickstart_desktop.png",
+    "screenshot": "/Users/sankalpjha/Documents/projects/forty/evidence/visual/screenshots/docs_quickstart_desktop.png",
     "textSample": "API GUIDES Introduction Quickstart Authentication ANALYSIS ENDPOINTS Create Heatmap POST Satellite View Segmentation POST Street View Segmentation POST Heat Intelligence POST Environmental Parameters POST TASK MANAGEMENT Check Status GET Check API Credits Usage GET RESOURCES Get a Free API Key POST Known Limitations Release Notes Quickstart Get started with the FortyGuard Enterprise API in minutes. This guide will help you authenticate, make your first request, and understand how to track and retrieve your task results. Authentication All requests to the FortyGuard Enterprise API require an API key. Simply include your API key within the request headers as shown below: api-key: YOUR_API_KEY No OAuth or token exchange is needed — your API key alone provides secure, authenticated access. Making a Request The Enterprise API currently offers six POST endpoints, each designed to handle different temperature intelligence operations (e.g., Heatmap Generation, Street View Segmentation, Heat Intelligence, Environmental Parameters, and more). Each POST request submits a task to the FortyGuard Engine — for example, generating a heatmap or analyzing a property's thermal profile. When you submit a request, the API immediately returns an activity_id — a unique identifier representing your submitted task. Tracking Task Status Once you've received your activity_id, you can use it to query the status of your task using the corresponding status (GET) endpoint. Each task progresses through one of the following states: STATUS DESCRIPTION Processing Your request has been received and is being computed by the engine. Completed The task completed successfully, and the results are now available. Failed The task did not complete successfully - you will not be charged credits for failed runs. Credits are only deducted after successful completion of a task (status: Completed). If successful, the same status endpoint will also include the result payload (e.g., temperature data, GeoJSON map, or analytical report) in the response body. Example Code (Python) Below is a simplified example showing how to submit a task and then check its status. Step 1 — Submit your request import requests submi",
     "failedRequests": [],
     "consoleMessages": []
@@ -18,7 +18,7 @@
     "status": 200,
     "title": "FortyGuard API",
     "elapsedMs": 11693,
-    "screenshot": "/Users/sankalpjha/Documents/projects/forty/evidence/screenshots/docs_introduction_desktop.png",
+    "screenshot": "/Users/sankalpjha/Documents/projects/forty/evidence/visual/screenshots/docs_introduction_desktop.png",
     "textSample": "API GUIDES Introduction Quickstart Authentication ANALYSIS ENDPOINTS Create Heatmap POST Satellite View Segmentation POST Street View Segmentation POST Heat Intelligence POST Environmental Parameters POST TASK MANAGEMENT Check Status GET Check API Credits Usage GET RESOURCES Get a Free API Key POST Known Limitations Release Notes Introduction As cities grapple with intensifying heat and climate volatility, the need for precise, actionable urban temperature intelligence has never been more urgent. The FortyGuard API Services framework responds to this challenge by offering a powerful suite of heat-intelligent endpoints that translate granular temperature data into operational insights. This documentation provides a comprehensive overview of the technical capabilities, service architecture, and data workflows that define FortyGuard's Temperature API®. Built upon our proprietary Large Temperature Models (LTMs), these APIs enable developers, urban planners, logistics coordinators, and policymakers to seamlessly integrate climate context into digital platforms and physical infrastructure decisions. Capabilities Our API suite provides real-time and forecasted heatmaps, advanced segmentation of satellite and street-level imagery, and comprehensive environmental parameter analysis. It powers the generation of Heat Intelligence and Temperature Property Reports, transforming temperature data into actionable insights. These capabilities deliver multi-dimensional analyses across geographic, environmental, urban, event-based, and anthropogenic factors—enabling smarter, temperature-adaptive design and decision-making at both city and property scales. Plan Availability Each endpoint in this documentation is tagged with the plan it belongs to. Use the labels in the sidebar and on each endpoint page to understand what's included in your subscription. BOTH Included in both API Basic and API Premium plans. BASIC Included in the API Basic plan. PREMIUM Included in the API Premium plan only. Endpoints that are available on both plans may still have plan-specific limits (e.g., heatmap area size or number of environmental parameters). These differences are called out on each endpoint ",
     "failedRequests": [],
     "consoleMessages": []
@@ -30,7 +30,7 @@
     "status": 200,
     "title": "FastAPI - ReDoc",
     "elapsedMs": 9323,
-    "screenshot": "/Users/sankalpjha/Documents/projects/forty/evidence/screenshots/api_redoc_desktop.png",
+    "screenshot": "/Users/sankalpjha/Documents/projects/forty/evidence/visual/screenshots/api_redoc_desktop.png",
     "textSample": "",
     "failedRequests": [
       {
@@ -47,7 +47,7 @@
     "status": 200,
     "title": "Temperature Dashboard™",
     "elapsedMs": 11768,
-    "screenshot": "/Users/sankalpjha/Documents/projects/forty/evidence/screenshots/dashboard_map_desktop.png",
+    "screenshot": "/Users/sankalpjha/Documents/projects/forty/evidence/visual/screenshots/dashboard_map_desktop.png",
     "textSample": "Welcome to the Temperature Dashboard®. Email Address Password Forgot password? Log in Or continue with Google Don’t have an account? Sign up",
     "failedRequests": [
       {
@@ -77,7 +77,7 @@
     "status": 200,
     "title": "Temperature Dashboard™",
     "elapsedMs": 11294,
-    "screenshot": "/Users/sankalpjha/Documents/projects/forty/evidence/screenshots/dashboard_map_mobile.png",
+    "screenshot": "/Users/sankalpjha/Documents/projects/forty/evidence/visual/screenshots/dashboard_map_mobile.png",
     "textSample": "Welcome to the Temperature Dashboard®. Email Address Password Forgot password? Log in Or continue with Google Don’t have an account? Sign up",
     "failedRequests": [
       {

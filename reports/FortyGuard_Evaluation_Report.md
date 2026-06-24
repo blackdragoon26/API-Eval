@@ -1,9 +1,9 @@
 # FortyGuard API Evaluation - Engineering Notes
 
-**Candidate:** Sankalp Jha  
-**Position:** DevSecOps and Network Architect  
+**Candidate:** [Sankalp Jha](https://github.com/blackdragoon26)  
+**Position:** Software Engineer Intern 
 **Date:** June 24, 2026  
-**Repository:** github.com/blackdragoon26/API-Eval  
+**Repository:** [github.com/blackdragoon26/API-Eval ](https://github.com/blackdragoon26/API-Eval) <br>
 **Scope:** Temperature API, async job behavior, validation, credit accounting, docs accuracy, and a light dashboard/docs visual pass
 
 ## Short Take
